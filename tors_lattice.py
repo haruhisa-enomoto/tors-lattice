@@ -3,14 +3,15 @@ This module implements lattices of torsion classes of an abelian length category
 in case they are finite.
 
 This module defines :class: `FiniteTorsLattice`, which is a subclass of
-:class:`sage.combinat.posets.lattices.FiniteLatticePoset`.
+:class:`sage.combinat.posets.lattices.FiniteLatticePoset`,
+together with various methods which are useful in the study of
+the representation theory of algebras.
 """
-from itertools import combinations
-
+import sage.all
+from sage.misc.cachefunc import cached_method
 from sage.combinat.posets.lattices import FiniteLatticePoset, LatticePoset
-from kappa import kappa, extended_kappa
 
-def kappa(lattice, j, *, check = True):
+def _kappa(lattice, j):
     r"""
     Return `\kappa(j)` for a join-irreducible element `j`
     in a finite lattice ``lattice`` if it exists.
@@ -24,9 +25,6 @@ def kappa(lattice, j, *, check = True):
     - ``j`` -- an element of ``lattice``,
       which is expected to be join-irreducible
 
-    - ``check`` -- a Boolean (default: ``True``),
-      whether to check that ``j`` is indeed join-irreducible
-
     OUTPUT:
 
     an element of ``lattice``, or ``None`` if it does not exist.
@@ -34,9 +32,6 @@ def kappa(lattice, j, *, check = True):
     .. SEEALSO::
       :meth:`sage.combinat.posets.hasse_diagram.HasseDiagram.kappa`
     """
-    if check and j not in lattice.join_irreducibles():
-        raise ValueError("{0} is not join-irreducible in {1}.".format(j,lattice))
-
     hasse = lattice._hasse_diagram
     j_vtx = lattice._element_to_vertex(j)
     m_vtx = hasse.kappa(j_vtx)
@@ -45,7 +40,7 @@ def kappa(lattice, j, *, check = True):
     m = lattice._vertex_to_element(m_vtx)
     return m
 
-def extended_kappa(lattice, x):
+def _extended_kappa(lattice, x):
     r"""
     Return `\overline{\kappa(x)}` for an element `x`
     in a finite lattice ``lattice`` if it exists.
@@ -67,9 +62,6 @@ def extended_kappa(lattice, x):
 
     an element of ``lattice``, or ``None`` if it does not exist.
 
-    .. SEEALSO::
-      :func:`kappa`
-
     REFERENCES:
 
     .. [BCZ] E. Barnard, G. Todorov, S. Zhu,
@@ -80,41 +72,36 @@ def extended_kappa(lattice, x):
     CJR = lattice.canonical_joinands(x)
     if CJR is None:
         return None
-    kappa_CJR = [kappa(lattice, j, check = False) for j in CJR]
+    kappa_CJR = [_kappa(lattice, j) for j in CJR]
     try:
         return lattice.meet(kappa_CJR)
     except:
         return None
 
-def myshow(poset, vertex_size = 100, **kwargs):
+def myshow(poset, label = True, vertex_size = 100, **kwargs):
     """
     A variant of ``show`` method with vertex labels,
     which looks nicer for the Hasse diagram of a poset.
 
-    INPUT:
-
-    - ``poset`` -- an object which has ``show`` method,
-      which we assume to be an instance of
-      :class:`sage.combinat.posets.posets.FinitePosets`
-
-    """
-    poset.show(vertex_color = "white", vertex_shape = "_",
-               vertex_size = vertex_size, aspect_ratio = "automatic", **kwargs)
-
-def myshow_nolabel(poset, figsize = None, vertex_size = 100, **kwargs):
-    """
-    A variant of ``show`` method without vertex labels,
-    which looks nicer for the Hasse diagram of a poset.
+    NOTE that the directions of Hasse arrows are opposite to
+    the representation-threorist's convention, that is,
+    every arrow starts at a smaller one and ends at the larger one.
 
     INPUT:
 
     - ``poset`` -- an object which has ``show`` method,
-      which we assume to be an instance of
+      which we expect to be an instance of
       :class:`sage.combinat.posets.posets.FinitePosets`
 
-    """
-    poset.show(label_elements= False, figsize = figsize, vertex_size = vertex_size, aspect_ratio = "automatic", **kwargs)
+    - ``label`` -- a Boolean (default: ``True``), whether to label vertices
 
+    """
+    if label:
+        poset.show(vertex_color = "white", vertex_shape = "_",
+                   vertex_size = vertex_size, aspect_ratio = "automatic", **kwargs)
+    else:
+        poset.show(label_elements= False, vertex_size = vertex_size,
+                   aspect_ratio = "automatic", **kwargs)
 
 def TorsLattice(data = None, *args, **kwargs):
     """
@@ -167,8 +154,8 @@ class FiniteTorsLattice(FiniteLatticePoset):
         """
         return self.top()
 
-    @lazy_attribute
-    def _all_itvs(self):
+    @cached_method
+    def all_itvs(self):
         """
         Return the set of all intervals in the torsion poset.
         """
@@ -230,7 +217,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
            Dynamical combinatorics and torsion classes,
            J. Pure Appl. Algebra 225 (2021), no. 9, 106642.
         """
-        return extended_kappa(self, T)
+        return _extended_kappa(self, T)
 
     @cached_method
     def bricks_in_tors(self, T):
@@ -530,7 +517,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
            ICE-closed subcategories and wide $\tau$-tilting modules,
            to appear in Math. Z.
         """
-        ice_bricks = {self.bricks(itv, check = False) for itv in self._all_itvs
+        ice_bricks = {self.bricks(itv, check = False) for itv in self.all_itvs()
                       if self.is_ice_itv(itv, check = False)}
         return LatticePoset((ice_bricks, attrcall("issubset")))
 
@@ -541,7 +528,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
 
         This is just a dual of :func:`ice_lattice`.
         """
-        ike_bricks = {self.bricks(itv, check = False) for itv in self._all_itvs
+        ike_bricks = {self.bricks(itv, check = False) for itv in self.all_itvs()
                       if self.is_ike_itv(itv, check = False)}
         return LatticePoset((ike_bricks, attrcall("issubset")))
 
@@ -555,7 +542,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
 
         This poset is not a lattice in general.
         """
-        brick_set = {self.bricks(itv, check = False) for itv in self._all_itvs}
+        brick_set = {self.bricks(itv, check = False) for itv in self.all_itvs()}
         return Poset((brick_set, attrcall("issubset")))
 
     def num_of_proj(self, arg):
@@ -577,7 +564,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
             U, T = arg
         else:
             U, T = self.zero(), arg
-        if check and not self.is_ice_itv([U,T]) and not self.is_ike_itv([U,T]):
+        if not self.is_ice_itv([U,T]) and not self.is_ike_itv([U,T]):
             raise NotImplementedError("The heart of this interval is not ICE-closed or IKE-closed.")
         if U == T:
             return 0
@@ -604,9 +591,8 @@ class FiniteTorsLattice(FiniteLatticePoset):
             for i in range(1,n+1):
                 for set_of_simples in combinations(simples, i):
                     serre = self.meet(set_of_simples)
-                    if self.is_gequal(serre, U):
+                    if self.is_lequal(serre, U):
                         return i
-
 
     def indec_tau_rigid(self):
         r"""
@@ -704,5 +690,34 @@ class FiniteTorsLattice(FiniteLatticePoset):
 
         an instance of :clas:`sage.homology.simplicial_complex.SimplicialComplex`
         """
-        return SimplicialComplex([self.tau_rigid_summand(T)) for T in self],
+        return SimplicialComplex([self.tau_rigid_summand(T) for T in self],
                                  maximality_check = False)
+
+    def num_of_proj(self, arg):
+        r"""
+        Return the number of indecomposable Ext-projective objects in a given subcategory
+
+        If ``arg`` is an element of ``self`` (i.e. a torsion class),
+        then the considered category is ``arg`` itself.
+        If ``arg`` is an interval $[U, T]$ of torsion classes, then this considers
+        the heart of this interval, i.e. $T \cap U^\perp$.
+        This is based on [ES, Corollary 4.28]
+
+        INPUT:
+
+        - ``arg`` -- either an element of ``self``, or an interval in ``self`` as a tuple or list
+
+        REFERENCES:
+
+        .. [ES] H. Enomoto, A. Sakai,
+           ICE-closed subcategories and wide $\tau$-tilting modules,
+           to appear in Math. Z.
+        """
+        if isinstance(arg, (list,tuple)):
+            U, T = arg
+        else:
+            U, T = self.zero(), arg
+        projs_in_T = {M for M in self.indec_tau_rigid()
+                      if T in self.has_tau_rigid_summand(M, check = False)}
+        T_minus_U = {M for M in projs_in_T if not self.is_lequal(M,U)}
+        return len(T_minus_U)
