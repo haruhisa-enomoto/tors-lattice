@@ -537,7 +537,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
         subcategories closed under images, cokernels, and extensions.
 
         This lattice is realized as a poset of sets of bricks
-        (represented by join-irreducibles) contained in ICE-clsoed subcategories.
+        (represented by join-irreducibles) contained in ICE-closed subcategories.
 
         OUTPUT:
 
@@ -559,7 +559,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
         subcategories closed under images, kernels, and extensions.
 
         This lattice is realized as a poset of sets of bricks
-        (represented by join-irreducibles) contained in IKE-clsoed subcategories.
+        (represented by join-irreducibles) contained in IKE-closed subcategories.
 
         OUTPUT:
 
@@ -575,7 +575,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
 
         A torsion heart is a subcategory which arises as a heart of some interval
         of torsion classes. For example, every wide subcategory, ICE-closed subcategory is
-        torsion hearts.
+        a torsion heart.
         This poset is not a lattice in general.
 
         This poset is realized as a poset of sets of bricks
@@ -594,9 +594,10 @@ class FiniteTorsLattice(FiniteLatticePoset):
         represented by join-irreducible torsion classes.
 
         For a $\tau$-tilting finite algebra, there is a bijection by [DIJ] between
-        indecomposable $\tau$-rigid module $M$ and join-irreducible torsion classes.
-        The correspondence is $T(M) = \mathsf{Fac} M$ for $\tau$-rigid $M$, and
-        the unique split projective object in $T$ for a join-irreducible torsion class $T$.
+        indecomposable $\tau$-rigid modules and join-irreducible torsion classes.
+        The correspondence is $T(M) = \mathsf{Fac} M$ for a $\tau$-rigid $M$, and
+        the unique indecomposable split projective object in $T$
+        for a join-irreducible torsion class $T$.
 
         Since this is the same as :meth:`all_bricks`,
         this function is only needed for the readability reason.
