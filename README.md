@@ -5,7 +5,8 @@ This module can deal with the lattice of torsion classes of &tau;-tilting finite
 ## Overview
 
 This module defines a class `FiniteTorsLattice`, which is a subclass of a SageMath class for finite lattices: [`FiniteLatticePoset`](https://doc.sagemath.org/html/en/reference/combinat/sage/combinat/posets/lattices.html#sage.combinat.posets.lattices.FiniteLatticePoset).
-`FiniteTorsLattice` is a class for lattices of torsion classes over &tau;-tilting fintie artin algebras. Once you input the lattice of torsion classes (e.g. using my [StringApplet-to-SageMath-converter](https://github.com/haruhisa-enomoto/StringApplet-to-SageMath-converter)), then this program can compute various objects naturally arising in the representation theory of algebras, such as the lattice of wide subcategories and support &tau;-tilting simplicial complex, and the number of indecomposable Ext-projectives of each torsion class, and so on.
+
+`FiniteTorsLattice` is a class for lattices of torsion classes over &tau;-tilting fintie artin algebras. Once you input the lattice of torsion classes (e.g. using my [StringApplet-to-SageMath-converter](https://github.com/haruhisa-enomoto/StringApplet-to-SageMath-converter)), then this program can compute (or construct) various objects naturally arising in the representation theory of algebras in SageMath, such as the lattice of wide subcategories and support &tau;-tilting simplicial complex, and the number of indecomposable Ext-projectives of each torsion class, and so on.
 
 ## Author
 [Haruhisa Enomoto](http://haruhisa-enomoto.github.io/), a postdoc. at Osaka Prefecture University in Japan.
