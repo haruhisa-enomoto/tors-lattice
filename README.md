@@ -17,7 +17,7 @@ This module defines a class `FiniteTorsLattice`, which is a subclass of a SageMa
 
 - [Manual](https://nbviewer.jupyter.org/github/haruhisa-enomoto/tors-lattice/blob/main/Manual.ipynb).
 
-*TO DO: write a user's guide for representation theorists)
+*TO DO: write a user's guide for representation theorists)*
 
 ## References
 
