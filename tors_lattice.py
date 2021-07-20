@@ -446,7 +446,7 @@ class FiniteTorsLattice(FiniteLatticePoset):
 
     def itv_lequal(self, itv1, itv2):
         r"""
-        Return whether the heart of ``itv1`` is contained in ``itv2``
+        Return whether the heart of ``itv1`` is contained in that of ``itv2``
 
         The heart of an interval $[U,T]$ is a subcategory $T \cap U^\perp$.
         By [DIRRT], the heart is recovered from bricks contained in it,
