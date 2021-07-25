@@ -6,6 +6,8 @@ This module defines :class: `FiniteTorsLattice`, which is a subclass of
 :class:`sage.combinat.posets.lattices.FiniteLatticePoset`,
 together with various methods which are useful in the study of
 the representation theory of algebras.
+
+Requirement: SageMath ver 9.x or later
 """
 # *****************************************************************************
 #       Copyright (C) 2021 Haruhisa Enomoto <the35883@osakafu-u.ac.jp>
