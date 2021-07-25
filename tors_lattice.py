@@ -826,5 +826,5 @@ class FiniteTorsLattice(FiniteLatticePoset):
             U, T = self.zero(), arg
         U, T = self(U), self(T) # Make sure that they are elements of `self`
 
-        T_minus_U = {M for M in T.projectives() if not self.is_lequal(M,U)}
+        T_minus_U = {M for M in self.projectives(T) if not self.is_lequal(M,U)}
         return len(T_minus_U)
