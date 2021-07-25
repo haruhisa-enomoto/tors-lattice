@@ -7,6 +7,18 @@ This module defines :class: `FiniteTorsLattice`, which is a subclass of
 together with various methods which are useful in the study of
 the representation theory of algebras.
 """
+# *****************************************************************************
+#       Copyright (C) 2021 Haruhisa Enomoto <the35883@osakafu-u.ac.jp>
+#
+# GitHub Repository:
+# https://github.com/haruhisa-enomoto/tors-lattice
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v3.0
+#                  https://www.gnu.org/licenses/
+#
+# Any feedback is welcome!
+# *****************************************************************************
 import sage.all
 from sage.misc.cachefunc import cached_method
 from sage.combinat.posets.lattices import FiniteLatticePoset, LatticePoset
@@ -814,7 +826,5 @@ class FiniteTorsLattice(FiniteLatticePoset):
             U, T = self.zero(), arg
         U, T = self(U), self(T) # Make sure that they are elements of `self`
 
-        projs_in_T = {M for M in self.indec_tau_rigid()
-                      if T in self.has_tau_rigid_summand(M, check = False)}
-        T_minus_U = {M for M in projs_in_T if not self.is_lequal(M,U)}
+        T_minus_U = {M for M in T.projectives() if not self.is_lequal(M,U)}
         return len(T_minus_U)
