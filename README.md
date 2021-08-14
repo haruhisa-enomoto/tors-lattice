@@ -20,7 +20,8 @@ Once you input the lattice of torsion classes (e.g. using my [StringApplet-to-Sa
 - [Manual](https://nbviewer.jupyter.org/github/haruhisa-enomoto/tors-lattice/blob/main/Manual.ipynb)
 
 - [Talk](https://haruhisa-enomoto.github.io/talks/2021-07-26/) which I gave to explain how this works and demonstrate this.
- - [Video](https://www.youtube.com/watch?v=2-y1a-_zEEA) explaining how to use this.
+
+- [Video](https://www.youtube.com/watch?v=2-y1a-_zEEA) explaining how to use this (based on the above talk).
 
 ## References
 
